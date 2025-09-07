@@ -1,0 +1,154 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 900px;
+                 background-color: #ffffff;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"borderWidth": 1, "color": {"background": "#AAB7B8", "border": "#666666"}, "id": "Pradeep George", "label": "Pradeep George", "shape": "dot", "size": 14, "title": "\u003cb\u003ePradeep George\u003c/b\u003e\u003cbr\u003eLab Engineer\u003cbr\u003eCluster: Materials \u00b7 Fund: ARIC\u003cbr\u003eManager: Yusra Abdulrahman"}, {"borderWidth": 1, "color": {"background": "#AAB7B8", "border": "#666666"}, "id": "Dilshad Ahmad", "label": "Dilshad Ahmad", "shape": "dot", "size": 14, "title": "\u003cb\u003eDilshad Ahmad\u003c/b\u003e\u003cbr\u003ePost Doc\u003cbr\u003eCluster: Materials \u00b7 Fund: ARIC\u003cbr\u003eManager: Rafic Ajaj"}, {"borderWidth": 1, "color": {"background": "#AAB7B8", "border": "#666666"}, "id": "Samee Ullah Khan", "label": "Samee Ullah Khan", "shape": "dot", "size": 14, "title": "\u003cb\u003eSamee Ullah Khan\u003c/b\u003e\u003cbr\u003ePost Doc\u003cbr\u003eCluster: Robotics \u00b7 Fund: RIC2D\u003cbr\u003eManager: Yahya Zweiri"}, {"borderWidth": 1, "color": {"background": "#AAB7B8", "border": "#666666"}, "id": "Hussain Sajwani", "label": "Hussain Sajwani", "shape": "dot", "size": 14, "title": "\u003cb\u003eHussain Sajwani\u003c/b\u003e\u003cbr\u003eResearch Assistant\u003cbr\u003eCluster: Robotics \u00b7 Fund: ARIC\u003cbr\u003eManager: Yusra Abdulrahman"}, {"borderWidth": 1, "color": {"background": "#AAB7B8", "border": "#666666"}, "id": "Eslam Mohamed", "label": "Eslam Mohamed", "shape": "dot", "size": 14, "title": "\u003cb\u003eEslam Mohamed\u003c/b\u003e\u003cbr\u003eResearch Assistant\u003cbr\u003eCluster: Robotics \u00b7 Fund: ARIC\u003cbr\u003eManager: Abdulla Ayyad"}, {"borderWidth": 1, "color": {"background": "#AAB7B8", "border": "#666666"}, "id": "Mohammed Alkrunz", "label": "Mohammed Alkrunz", "shape": "dot", "size": 14, "title": "\u003cb\u003eMohammed Alkrunz\u003c/b\u003e\u003cbr\u003eResearch Assistant\u003cbr\u003eCluster: Materials \u00b7 Fund: ARIC\u003cbr\u003eManager: Yarjan Abdul Samad"}, {"borderWidth": 1, "color": {"background": "#AAB7B8", "border": "#666666"}, "id": "Abdallah Alkilany", "label": "Abdallah Alkilany", "shape": "dot", "size": 14, "title": "\u003cb\u003eAbdallah Alkilany\u003c/b\u003e\u003cbr\u003eResearch Assistant\u003cbr\u003eCluster: Robotics \u00b7 Fund: ARIC\u003cbr\u003eManager: Abdulla Ayyad"}, {"borderWidth": 1, "color": {"background": "#AAB7B8", "border": "#666666"}, "id": "Akram Khairi", "label": "Akram Khairi", "shape": "dot", "size": 14, "title": "\u003cb\u003eAkram Khairi\u003c/b\u003e\u003cbr\u003eResearch Assistant\u003cbr\u003eCluster: Robotics \u00b7 Fund: ARIC\u003cbr\u003eManager: Abdulla Ayyad"}, {"borderWidth": 3, "color": {"background": "#AAB7B8", "border": "#E74C3C"}, "id": "Abdulla Ayyad", "label": "Abdulla Ayyad", "shape": "dot", "size": 14, "title": "\u003cb\u003eAbdulla Ayyad\u003c/b\u003e\u003cbr\u003eSenior Research Associate\u003cbr\u003eCluster: Robotics \u00b7 Fund: ARIC\u003cbr\u003eManager: Yusra Abdulrahman"}, {"borderWidth": 1, "color": {"background": "#AAB7B8", "border": "#666666"}, "id": "Laith AbuAssi", "label": "Laith AbuAssi", "shape": "dot", "size": 14, "title": "\u003cb\u003eLaith AbuAssi\u003c/b\u003e\u003cbr\u003eResearch Associate\u003cbr\u003eCluster: Robotics \u00b7 Fund: ARIC\u003cbr\u003eManager: Yusra Abdulrahman"}, {"borderWidth": 1, "color": {"background": "#AAB7B8", "border": "#666666"}, "id": "Abdelrahman Ahmed", "label": "Abdelrahman Ahmed", "shape": "dot", "size": 14, "title": "\u003cb\u003eAbdelrahman Ahmed\u003c/b\u003e\u003cbr\u003eResearch Associate\u003cbr\u003eCluster: Robotics \u00b7 Fund: ARIC\u003cbr\u003eManager: Yusra Abdulrahman"}, {"borderWidth": 1, "color": {"background": "#AAB7B8", "border": "#666666"}, "id": "Omer Mohamed", "label": "Omer Mohamed", "shape": "dot", "size": 14, "title": "\u003cb\u003eOmer Mohamed\u003c/b\u003e\u003cbr\u003eResearch Associate\u003cbr\u003eCluster: Materials \u00b7 Fund: ARIC\u003cbr\u003eManager: Andreas Schiffer"}, {"borderWidth": 1, "color": {"background": "#AAB7B8", "border": "#666666"}, "id": "Ahmad Aljarah", "label": "Ahmad Aljarah", "shape": "dot", "size": 14, "title": "\u003cb\u003eAhmad Aljarah\u003c/b\u003e\u003cbr\u003eResearch Associate\u003cbr\u003eCluster: Healthcare \u00b7 Fund: ARIC\u003cbr\u003eManager: Irfan Hussain"}, {"borderWidth": 1, "color": {"background": "#AAB7B8", "border": "#666666"}, "id": "Ehtesham Iqbal", "label": "Ehtesham Iqbal", "shape": "dot", "size": 14, "title": "\u003cb\u003eEhtesham Iqbal\u003c/b\u003e\u003cbr\u003eResearch Associate\u003cbr\u003eCluster: Robotics \u00b7 Fund: ARIC\u003cbr\u003eManager: Yusra Abdulrahman"}, {"borderWidth": 1, "color": {"background": "#AAB7B8", "border": "#666666"}, "id": "Ahmed Taha", "label": "Ahmed Taha", "shape": "dot", "size": 14, "title": "\u003cb\u003eAhmed Taha\u003c/b\u003e\u003cbr\u003eResearch Associate\u003cbr\u003eCluster: Robotics \u00b7 Fund: ARIC\u003cbr\u003eManager: Abdulla Ayyad"}, {"borderWidth": 1, "color": {"background": "#AAB7B8", "border": "#666666"}, "id": "Youssef Farah", "label": "Youssef Farah", "shape": "dot", "size": 14, "title": "\u003cb\u003eYoussef Farah\u003c/b\u003e\u003cbr\u003eResearch Associate\u003cbr\u003eCluster: Robotics \u00b7 Fund: ARIC\u003cbr\u003eManager: Abdulla Ayyad"}, {"borderWidth": 1, "color": {"background": "#AAB7B8", "border": "#666666"}, "id": "Noureldin Mohamemd", "label": "Noureldin Mohamemd", "shape": "dot", "size": 14, "title": "\u003cb\u003eNoureldin Mohamemd\u003c/b\u003e\u003cbr\u003eResearch Associate\u003cbr\u003eCluster: Healthcare \u00b7 Fund: ARIC\u003cbr\u003eManager: Irfan Hussain"}, {"borderWidth": 1, "color": {"background": "#AAB7B8", "border": "#666666"}, "id": "Xiaoqian Huang", "label": "Xiaoqian Huang", "shape": "dot", "size": 14, "title": "\u003cb\u003eXiaoqian Huang\u003c/b\u003e\u003cbr\u003ePost Doc\u003cbr\u003eCluster: Robotics \u00b7 Fund: DFL\u003cbr\u003eManager: Yahya Zweiri"}, {"borderWidth": 1, "color": {"background": "#AAB7B8", "border": "#666666"}, "id": "Tareq Farrah", "label": "Tareq Farrah", "shape": "dot", "size": 14, "title": "\u003cb\u003eTareq Farrah\u003c/b\u003e\u003cbr\u003eCore Lab Engineer\u003cbr\u003eCluster: Materials \u00b7 Fund: na\u003cbr\u003eManager: external"}, {"borderWidth": 1, "color": {"background": "#AAB7B8", "border": "#666666"}, "id": "Abdullah Solayman", "label": "Abdullah Solayman", "shape": "dot", "size": 14, "title": "\u003cb\u003eAbdullah Solayman\u003c/b\u003e\u003cbr\u003eResearch Associate\u003cbr\u003eCluster: Materials \u00b7 Fund: SWARD\u003cbr\u003eManager: Yahya Zweiri"}, {"borderWidth": 1, "color": {"background": "#AAB7B8", "border": "#666666"}, "id": "Rohan Balasaheb", "label": "Rohan Balasaheb", "shape": "dot", "size": 14, "title": "\u003cb\u003eRohan Balasaheb\u003c/b\u003e\u003cbr\u003eResearch Scientist\u003cbr\u003eCluster: Materials \u00b7 Fund: SWARD\u003cbr\u003eManager: Yarjan Abdul Samad"}, {"borderWidth": 1, "color": {"background": "#AAB7B8", "border": "#666666"}, "id": "Afnan Adil", "label": "Afnan Adil", "shape": "dot", "size": 14, "title": "\u003cb\u003eAfnan Adil\u003c/b\u003e\u003cbr\u003eResearch Assistant\u003cbr\u003eCluster: Robotics \u00b7 Fund: TII\u003cbr\u003eManager: Yahya Zweiri"}, {"borderWidth": 1, "color": {"background": "#AAB7B8", "border": "#666666"}, "id": "Hazem Elrefaei", "label": "Hazem Elrefaei", "shape": "dot", "size": 14, "title": "\u003cb\u003eHazem Elrefaei\u003c/b\u003e\u003cbr\u003eResearch Associate\u003cbr\u003eCluster:  Robotics \u00b7 Fund: TII\u003cbr\u003eManager: Yahya Zweiri"}, {"borderWidth": 1, "color": {"background": "#AAB7B8", "border": "#666666"}, "id": "Abdallah Hadid", "label": "Abdallah Hadid", "shape": "dot", "size": 14, "title": "\u003cb\u003eAbdallah Hadid\u003c/b\u003e\u003cbr\u003eResearch Associate\u003cbr\u003eCluster: Robotics \u00b7 Fund: TII\u003cbr\u003eManager: Yahya Zweiri"}, {"borderWidth": 1, "color": {"background": "#AAB7B8", "border": "#666666"}, "id": "Faisal Mohammed", "label": "Faisal Mohammed", "shape": "dot", "size": 14, "title": "\u003cb\u003eFaisal Mohammed\u003c/b\u003e\u003cbr\u003eResearch Associate\u003cbr\u003eCluster: Robotics \u00b7 Fund: TII\u003cbr\u003eManager: Yahya Zweiri"}, {"borderWidth": 1, "color": {"background": "#AAB7B8", "border": "#666666"}, "id": "Asim Khan", "label": "Asim Khan", "shape": "dot", "size": 14, "title": "\u003cb\u003eAsim Khan\u003c/b\u003e\u003cbr\u003ePost Doc\u003cbr\u003eCluster: Robotics \u00b7 Fund: DFL\u003cbr\u003eManager: Yahya Zweiri"}, {"borderWidth": 3, "color": {"background": "#AAB7B8", "border": "#E74C3C"}, "id": "Yahya Zweiri", "label": "Yahya Zweiri", "shape": "dot", "size": 14, "title": "\u003cb\u003eYahya Zweiri\u003c/b\u003e\u003cbr\u003eDirector\u003cbr\u003eCluster: Robotics \u00b7 Fund: ARIC\u003cbr\u003eManager: external"}, {"borderWidth": 3, "color": {"background": "#AAB7B8", "border": "#E74C3C"}, "id": "Yusra Abdulrahman", "label": "Yusra Abdulrahman", "shape": "dot", "size": 14, "title": "\u003cb\u003eYusra Abdulrahman\u003c/b\u003e\u003cbr\u003eDeputy Director\u003cbr\u003eCluster: Robotics \u00b7 Fund: ARIC\u003cbr\u003eManager: external"}, {"borderWidth": 3, "color": {"background": "#AAB7B8", "border": "#E74C3C"}, "id": "Rafic Ajaj", "label": "Rafic Ajaj", "shape": "dot", "size": 14, "title": "\u003cb\u003eRafic Ajaj\u003c/b\u003e\u003cbr\u003eFaculty\u003cbr\u003eCluster: Materials \u00b7 Fund: ARIC\u003cbr\u003eManager: external"}, {"borderWidth": 3, "color": {"background": "#AAB7B8", "border": "#E74C3C"}, "id": "Irfan Hussain", "label": "Irfan Hussain", "shape": "dot", "size": 14, "title": "\u003cb\u003eIrfan Hussain\u003c/b\u003e\u003cbr\u003eFaculty\u003cbr\u003eCluster: Healthcare \u00b7 Fund: ARIC\u003cbr\u003eManager: external"}, {"borderWidth": 3, "color": {"background": "#AAB7B8", "border": "#E74C3C"}, "id": "Andreas Schiffer", "label": "Andreas Schiffer", "shape": "dot", "size": 14, "title": "\u003cb\u003eAndreas Schiffer\u003c/b\u003e\u003cbr\u003eFaculty\u003cbr\u003eCluster: Materials \u00b7 Fund: ARIC\u003cbr\u003eManager: external"}, {"borderWidth": 3, "color": {"background": "#AAB7B8", "border": "#E74C3C"}, "id": "Yarjan Abdul Samad", "label": "Yarjan Abdul Samad", "shape": "dot", "size": 14, "title": "\u003cb\u003eYarjan Abdul Samad\u003c/b\u003e\u003cbr\u003eFaculty\u003cbr\u003eCluster: Materials \u00b7 Fund: ARIC\u003cbr\u003eManager: external"}, {"borderWidth": 1, "color": {"background": "#AAB7B8", "border": "#666666"}, "id": "Wesley Cantwell", "label": "Wesley Cantwell", "shape": "dot", "size": 14, "title": "\u003cb\u003eWesley Cantwell\u003c/b\u003e\u003cbr\u003eFaculty\u003cbr\u003eCluster: Materials \u00b7 Fund: ARIC\u003cbr\u003eManager: external"}, {"borderWidth": 1, "color": {"background": "#AAB7B8", "border": "#666666"}, "id": "Kin Liao", "label": "Kin Liao", "shape": "dot", "size": 14, "title": "\u003cb\u003eKin Liao\u003c/b\u003e\u003cbr\u003eFaculty\u003cbr\u003eCluster: Materials \u00b7 Fund: ARIC\u003cbr\u003eManager: external"}, {"borderWidth": 1, "color": {"background": "#AAB7B8", "border": "#666666"}, "id": "Lianxi Zheng", "label": "Lianxi Zheng", "shape": "dot", "size": 14, "title": "\u003cb\u003eLianxi Zheng\u003c/b\u003e\u003cbr\u003eFaculty\u003cbr\u003eCluster: Materials \u00b7 Fund: ARIC\u003cbr\u003eManager: external"}, {"borderWidth": 1, "color": {"background": "#AAB7B8", "border": "#666666"}, "id": "Rehan Umer", "label": "Rehan Umer", "shape": "dot", "size": 14, "title": "\u003cb\u003eRehan Umer\u003c/b\u003e\u003cbr\u003eFaculty\u003cbr\u003eCluster: Materials \u00b7 Fund: ARIC\u003cbr\u003eManager: external"}, {"borderWidth": 3, "color": {"background": "#AAB7B8", "border": "#E74C3C"}, "id": "Kamran Khan", "label": "Kamran Khan", "shape": "dot", "size": 14, "title": "\u003cb\u003eKamran Khan\u003c/b\u003e\u003cbr\u003eFaculty\u003cbr\u003eCluster: Materials \u00b7 Fund: ARIC\u003cbr\u003eManager: external"}, {"borderWidth": 1, "color": {"background": "#AAB7B8", "border": "#666666"}, "id": "Charalampos Pitsalidis", "label": "Charalampos Pitsalidis", "shape": "dot", "size": 14, "title": "\u003cb\u003eCharalampos Pitsalidis\u003c/b\u003e\u003cbr\u003eFaculty\u003cbr\u003eCluster: Healthcare \u00b7 Fund: ARIC\u003cbr\u003eManager: external"}, {"borderWidth": 1, "color": {"background": "#AAB7B8", "border": "#666666"}, "id": "Mohammad Alsharid", "label": "Mohammad Alsharid", "shape": "dot", "size": 14, "title": "\u003cb\u003eMohammad Alsharid\u003c/b\u003e\u003cbr\u003eFaculty\u003cbr\u003eCluster: Healthcare \u00b7 Fund: ARIC\u003cbr\u003eManager: external"}, {"borderWidth": 1, "color": {"background": "#F9E79F", "border": "#C8B24A"}, "id": "Robotics-STRATA", "label": "Robotics-STRATA", "shape": "diamond", "size": 26, "title": "\u003cb\u003eRobotics-STRATA\u003c/b\u003e\u003cbr\u003eProject group"}, {"borderWidth": 1, "color": {"background": "#F9E79F", "border": "#C8B24A"}, "id": "Robotics-SANAD", "label": "Robotics-SANAD", "shape": "diamond", "size": 26, "title": "\u003cb\u003eRobotics-SANAD\u003c/b\u003e\u003cbr\u003eProject group"}, {"borderWidth": 1, "color": {"background": "#F9E79F", "border": "#C8B24A"}, "id": "Robotics-Research", "label": "Robotics-Research", "shape": "diamond", "size": 26, "title": "\u003cb\u003eRobotics-Research\u003c/b\u003e\u003cbr\u003eProject group"}, {"borderWidth": 1, "color": {"background": "#F9E79F", "border": "#C8B24A"}, "id": "Materials-STRATA", "label": "Materials-STRATA", "shape": "diamond", "size": 26, "title": "\u003cb\u003eMaterials-STRATA\u003c/b\u003e\u003cbr\u003eProject group"}, {"borderWidth": 1, "color": {"background": "#F9E79F", "border": "#C8B24A"}, "id": "Materials-SANAD", "label": "Materials-SANAD", "shape": "diamond", "size": 26, "title": "\u003cb\u003eMaterials-SANAD\u003c/b\u003e\u003cbr\u003eProject group"}, {"borderWidth": 1, "color": {"background": "#F9E79F", "border": "#C8B24A"}, "id": "Materials-Research", "label": "Materials-Research", "shape": "diamond", "size": 26, "title": "\u003cb\u003eMaterials-Research\u003c/b\u003e\u003cbr\u003eProject group"}, {"borderWidth": 1, "color": {"background": "#F9E79F", "border": "#C8B24A"}, "id": "Healthcare-Amana", "label": "Healthcare-Amana", "shape": "diamond", "size": 26, "title": "\u003cb\u003eHealthcare-Amana\u003c/b\u003e\u003cbr\u003eProject group"}, {"borderWidth": 1, "color": {"background": "#F9E79F", "border": "#C8B24A"}, "id": "Healthcare-Research", "label": "Healthcare-Research", "shape": "diamond", "size": 26, "title": "\u003cb\u003eHealthcare-Research\u003c/b\u003e\u003cbr\u003eProject group"}, {"borderWidth": 1, "color": {"background": "#F9E79F", "border": "#C8B24A"}, "id": "External", "label": "External", "shape": "diamond", "size": 26, "title": "\u003cb\u003eExternal\u003c/b\u003e\u003cbr\u003eProject group"}, {"borderWidth": 1, "color": {"background": "#F9E79F", "border": "#C8B24A"}, "id": "Admin", "label": "Admin", "shape": "diamond", "size": 26, "title": "\u003cb\u003eAdmin\u003c/b\u003e\u003cbr\u003eProject group"}]);
+                  edges = new vis.DataSet([{"arrows": "to", "color": "#111111", "from": "Yusra Abdulrahman", "title": "Line manager", "to": "Pradeep George", "width": 2.0}, {"arrows": "to", "color": "#111111", "from": "Rafic Ajaj", "title": "Line manager", "to": "Dilshad Ahmad", "width": 2.0}, {"arrows": "to", "color": "#111111", "from": "Yahya Zweiri", "title": "Line manager", "to": "Samee Ullah Khan", "width": 2.0}, {"arrows": "to", "color": "#111111", "from": "Yusra Abdulrahman", "title": "Line manager", "to": "Hussain Sajwani", "width": 2.0}, {"arrows": "to", "color": "#111111", "from": "Abdulla Ayyad", "title": "Line manager", "to": "Eslam Mohamed", "width": 2.0}, {"arrows": "to", "color": "#111111", "from": "Yarjan Abdul Samad", "title": "Line manager", "to": "Mohammed Alkrunz", "width": 2.0}, {"arrows": "to", "color": "#111111", "from": "Abdulla Ayyad", "title": "Line manager", "to": "Abdallah Alkilany", "width": 2.0}, {"arrows": "to", "color": "#111111", "from": "Abdulla Ayyad", "title": "Line manager", "to": "Akram Khairi", "width": 2.0}, {"arrows": "to", "color": "#111111", "from": "Yusra Abdulrahman", "title": "Line manager", "to": "Abdulla Ayyad", "width": 2.0}, {"arrows": "to", "color": "#111111", "from": "Yusra Abdulrahman", "title": "Line manager", "to": "Laith AbuAssi", "width": 2.0}, {"arrows": "to", "color": "#111111", "from": "Yusra Abdulrahman", "title": "Line manager", "to": "Abdelrahman Ahmed", "width": 2.0}, {"arrows": "to", "color": "#111111", "from": "Andreas Schiffer", "title": "Line manager", "to": "Omer Mohamed", "width": 2.0}, {"arrows": "to", "color": "#111111", "from": "Irfan Hussain", "title": "Line manager", "to": "Ahmad Aljarah", "width": 2.0}, {"arrows": "to", "color": "#111111", "from": "Yusra Abdulrahman", "title": "Line manager", "to": "Ehtesham Iqbal", "width": 2.0}, {"arrows": "to", "color": "#111111", "from": "Abdulla Ayyad", "title": "Line manager", "to": "Ahmed Taha", "width": 2.0}, {"arrows": "to", "color": "#111111", "from": "Abdulla Ayyad", "title": "Line manager", "to": "Youssef Farah", "width": 2.0}, {"arrows": "to", "color": "#111111", "from": "Irfan Hussain", "title": "Line manager", "to": "Noureldin Mohamemd", "width": 2.0}, {"arrows": "to", "color": "#111111", "from": "Yahya Zweiri", "title": "Line manager", "to": "Xiaoqian Huang", "width": 2.0}, {"arrows": "to", "color": "#111111", "from": "Yahya Zweiri", "title": "Line manager", "to": "Abdullah Solayman", "width": 2.0}, {"arrows": "to", "color": "#111111", "from": "Yarjan Abdul Samad", "title": "Line manager", "to": "Rohan Balasaheb", "width": 2.0}, {"arrows": "to", "color": "#111111", "from": "Yahya Zweiri", "title": "Line manager", "to": "Afnan Adil", "width": 2.0}, {"arrows": "to", "color": "#111111", "from": "Yahya Zweiri", "title": "Line manager", "to": "Hazem Elrefaei", "width": 2.0}, {"arrows": "to", "color": "#111111", "from": "Yahya Zweiri", "title": "Line manager", "to": "Abdallah Hadid", "width": 2.0}, {"arrows": "to", "color": "#111111", "from": "Yahya Zweiri", "title": "Line manager", "to": "Faisal Mohammed", "width": 2.0}, {"arrows": "to", "color": "#111111", "from": "Yahya Zweiri", "title": "Line manager", "to": "Asim Khan", "width": 2.0}, {"arrows": "to", "color": "#E74C3C", "from": "Pradeep George", "title": "Pradeep George \u2192 Admin (across 1 project(s))", "to": "Admin", "width": 2.0}, {"arrows": "to", "color": "#E74C3C", "from": "Dilshad Ahmad", "title": "Dilshad Ahmad \u2192 Materials-Research (across 1 project(s))", "to": "Materials-Research", "width": 2.0}, {"arrows": "to", "color": "#E74C3C", "from": "Samee Ullah Khan", "title": "Samee Ullah Khan \u2192 External (across 1 project(s))", "to": "External", "width": 2.0}, {"arrows": "to", "color": "#E74C3C", "from": "Hussain Sajwani", "title": "Hussain Sajwani \u2192 External (across 1 project(s))", "to": "External", "width": 2.0}, {"arrows": "to", "color": "#E74C3C", "from": "Hussain Sajwani", "title": "Hussain Sajwani \u2192 Admin (across 1 project(s))", "to": "Admin", "width": 2.0}, {"arrows": "to", "color": "#E74C3C", "from": "Eslam Mohamed", "title": "Eslam Mohamed \u2192 Robotics-STRATA (across 2 project(s))", "to": "Robotics-STRATA", "width": 2.0}, {"arrows": "to", "color": "#E74C3C", "from": "Mohammed Alkrunz", "title": "Mohammed Alkrunz \u2192 Materials-STRATA (across 1 project(s))", "to": "Materials-STRATA", "width": 2.0}, {"arrows": "to", "color": "#E74C3C", "from": "Abdallah Alkilany", "title": "Abdallah Alkilany \u2192 Materials-SANAD (across 2 project(s))", "to": "Materials-SANAD", "width": 2.0}, {"arrows": "to", "color": "#E74C3C", "from": "Abdallah Alkilany", "title": "Abdallah Alkilany \u2192 Robotics-SANAD (across 2 project(s))", "to": "Robotics-SANAD", "width": 2.0}, {"arrows": "to", "color": "#E74C3C", "from": "Abdallah Alkilany", "title": "Abdallah Alkilany \u2192 Robotics-STRATA (across 2 project(s))", "to": "Robotics-STRATA", "width": 2.0}, {"arrows": "to", "color": "#E74C3C", "from": "Abdallah Alkilany", "title": "Abdallah Alkilany \u2192 Admin (across 1 project(s))", "to": "Admin", "width": 2.0}, {"arrows": "to", "color": "#E74C3C", "from": "Akram Khairi", "title": "Akram Khairi \u2192 Robotics-STRATA (across 1 project(s))", "to": "Robotics-STRATA", "width": 2.0}, {"arrows": "to", "color": "#E74C3C", "from": "Akram Khairi", "title": "Akram Khairi \u2192 Robotics-Research (across 1 project(s))", "to": "Robotics-Research", "width": 2.0}, {"arrows": "to", "color": "#E74C3C", "from": "Laith AbuAssi", "title": "Laith AbuAssi \u2192 Robotics-STRATA (across 2 project(s))", "to": "Robotics-STRATA", "width": 2.0}, {"arrows": "to", "color": "#E74C3C", "from": "Laith AbuAssi", "title": "Laith AbuAssi \u2192 External (across 1 project(s))", "to": "External", "width": 2.0}, {"arrows": "to", "color": "#E74C3C", "from": "Laith AbuAssi", "title": "Laith AbuAssi \u2192 Healthcare-Amana (across 1 project(s))", "to": "Healthcare-Amana", "width": 2.0}, {"arrows": "to", "color": "#E74C3C", "from": "Abdelrahman Ahmed", "title": "Abdelrahman Ahmed \u2192 Admin (across 1 project(s))", "to": "Admin", "width": 2.0}, {"arrows": "to", "color": "#E74C3C", "from": "Abdelrahman Ahmed", "title": "Abdelrahman Ahmed \u2192 Robotics-SANAD (across 4 project(s))", "to": "Robotics-SANAD", "width": 2.0}, {"arrows": "to", "color": "#E74C3C", "from": "Abdelrahman Ahmed", "title": "Abdelrahman Ahmed \u2192 Materials-SANAD (across 1 project(s))", "to": "Materials-SANAD", "width": 2.0}, {"arrows": "to", "color": "#E74C3C", "from": "Omer Mohamed", "title": "Omer Mohamed \u2192 Materials-SANAD (across 2 project(s))", "to": "Materials-SANAD", "width": 2.0}, {"arrows": "to", "color": "#E74C3C", "from": "Ahmad Aljarah", "title": "Ahmad Aljarah \u2192 Healthcare-Amana (across 1 project(s))", "to": "Healthcare-Amana", "width": 2.0}, {"arrows": "to", "color": "#E74C3C", "from": "Ahmad Aljarah", "title": "Ahmad Aljarah \u2192 Admin (across 1 project(s))", "to": "Admin", "width": 2.0}, {"arrows": "to", "color": "#E74C3C", "from": "Ehtesham Iqbal", "title": "Ehtesham Iqbal \u2192 Robotics-SANAD (across 2 project(s))", "to": "Robotics-SANAD", "width": 2.0}, {"arrows": "to", "color": "#E74C3C", "from": "Ehtesham Iqbal", "title": "Ehtesham Iqbal \u2192 Robotics-Research (across 1 project(s))", "to": "Robotics-Research", "width": 2.0}, {"arrows": "to", "color": "#E74C3C", "from": "Ahmed Taha", "title": "Ahmed Taha \u2192 Robotics-STRATA (across 2 project(s))", "to": "Robotics-STRATA", "width": 2.0}, {"arrows": "to", "color": "#E74C3C", "from": "Youssef Farah", "title": "Youssef Farah \u2192 Robotics-STRATA (across 1 project(s))", "to": "Robotics-STRATA", "width": 2.0}, {"arrows": "to", "color": "#E74C3C", "from": "Noureldin Mohamemd", "title": "Noureldin Mohamemd \u2192 Healthcare-Amana (across 1 project(s))", "to": "Healthcare-Amana", "width": 2.0}, {"arrows": "to", "color": "#E74C3C", "from": "Xiaoqian Huang", "title": "Xiaoqian Huang \u2192 External (across 1 project(s))", "to": "External", "width": 2.0}, {"arrows": "to", "color": "#E74C3C", "from": "Tareq Farrah", "title": "Tareq Farrah \u2192 Admin (across 1 project(s))", "to": "Admin", "width": 2.0}, {"arrows": "to", "color": "#E74C3C", "from": "Abdullah Solayman", "title": "Abdullah Solayman \u2192 External (across 1 project(s))", "to": "External", "width": 2.0}, {"arrows": "to", "color": "#E74C3C", "from": "Abdullah Solayman", "title": "Abdullah Solayman \u2192 Admin (across 1 project(s))", "to": "Admin", "width": 2.0}, {"arrows": "to", "color": "#E74C3C", "from": "Rohan Balasaheb", "title": "Rohan Balasaheb \u2192 External (across 1 project(s))", "to": "External", "width": 2.0}, {"arrows": "to", "color": "#E74C3C", "from": "Afnan Adil", "title": "Afnan Adil \u2192 External (across 1 project(s))", "to": "External", "width": 2.0}, {"arrows": "to", "color": "#E74C3C", "from": "Hazem Elrefaei", "title": "Hazem Elrefaei \u2192 External (across 1 project(s))", "to": "External", "width": 2.0}, {"arrows": "to", "color": "#E74C3C", "from": "Abdallah Hadid", "title": "Abdallah Hadid \u2192 External (across 1 project(s))", "to": "External", "width": 2.0}, {"arrows": "to", "color": "#E74C3C", "from": "Faisal Mohammed", "title": "Faisal Mohammed \u2192 External (across 1 project(s))", "to": "External", "width": 2.0}, {"arrows": "to", "color": "#E74C3C", "from": "Asim Khan", "title": "Asim Khan \u2192 External (across 1 project(s))", "to": "External", "width": 2.0}, {"arrows": "to", "color": "#E74C3C", "from": "Kin Liao", "title": "Kin Liao \u2192 Materials-Research (across 1 project(s))", "to": "Materials-Research", "width": 2.0}, {"arrows": "to", "color": "#E74C3C", "from": "Lianxi Zheng", "title": "Lianxi Zheng \u2192 Materials-Research (across 1 project(s))", "to": "Materials-Research", "width": 2.0}, {"arrows": "to", "color": "#E74C3C", "from": "Rehan Umer", "title": "Rehan Umer \u2192 Materials-Research (across 1 project(s))", "to": "Materials-Research", "width": 2.0}, {"arrows": "to", "color": "#E74C3C", "from": "Kamran Khan", "title": "Kamran Khan \u2192 Materials-Research (across 1 project(s))", "to": "Materials-Research", "width": 2.0}, {"arrows": "to", "color": "#E74C3C", "from": "Charalampos Pitsalidis", "title": "Charalampos Pitsalidis \u2192 Healthcare-Research (across 1 project(s))", "to": "Healthcare-Research", "width": 2.0}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {"layout": {"improvedLayout": true}, "physics": {"enabled": true, "solver": "forceAtlas2Based", "forceAtlas2Based": {"gravitationalConstant": -200, "centralGravity": 0.01, "springLength": 170, "springConstant": 0.06, "damping": 0.4, "avoidOverlap": 1}, "stabilization": {"enabled": true, "iterations": 1000}}, "nodes": {"font": {"size": 30}}, "interaction": {"hover": true, "navigationButtons": true, "keyboard": true}, "edges": {"smooth": {"type": "dynamic"}}};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    
+<div style="
+  position: fixed; top: 10px; left: 10px;
+  background-color: rgba(255,255,255,0.92);
+  padding: 10px 12px; border: 1px solid #ccc;
+  border-radius: 6px; font-size: 14px;
+  z-index: 9999; line-height: 1.3;
+">
+  <b>Legend</b><br>
+  <div style="margin-top:4px;">
+    <span style="display:inline-block;width:12px;height:12px;background:#F9E79F;transform: rotate(45deg);margin-right:8px;border:1px solid #C8B24A;"></span>
+    Group (diamond)
+  </div>
+  <div>
+    <span style="display:inline-block;width:12px;height:12px;background:#AAB7B8;border-radius:50%;margin-right:8px;border:1px solid #666;"></span>
+    Member (circle)
+  </div>
+
+  <div>
+    <span style="display:inline-block;width:12px;height:12px;background:#AAB7B8;border-radius:50%;margin-right:8px;border:3px solid #E74C3C;"></span>
+    Manager (red ring)
+  </div>
+  <hr style="margin:6px 0;">
+  <div><span style="color:#111111;">Black arrow</span> = Manager → Member</div>
+  <div><span style="color:#E74C3C;">Red arrow</span> = Member → Group</div>
+</div>
+
+</body>
+</html>
